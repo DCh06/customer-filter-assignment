@@ -1,1 +1,10 @@
-<p>layout works!</p>
+<div class="layout">
+    <div class="layout-header">
+        <div class="layout-heading">CUSTOMER FILTER</div>
+        <button class="discard-button">Discard filters</button>
+    </div>
+    <app-filter-wrapper>
+        <ng-content></ng-content>
+    </app-filter-wrapper>
+    <button>Apply filters</button>
+</div>

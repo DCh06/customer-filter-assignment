@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { FilterWrapperComponent } from '../filter-wrapper/filter-wrapper.component';
 
 @Component({
     selector: 'app-layout',
-    imports: [],
+    imports: [FilterWrapperComponent],
     templateUrl: './layout.component.html',
     styleUrl: './layout.component.scss',
 })

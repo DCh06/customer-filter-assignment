@@ -1,1 +1,20 @@
-<p>customer-filter works!</p>
+@if (data$ | async; as data) {
+    <app-layout>
+        <!-- <app-filter-row></app-filter-row> -->
+        <div [formGroup]="form">
+            <div [formArrayName]="'events'">
+                @for (item of events.controls; track item; let i = $index) {
+                    <div class="events-controls">
+                        <!-- <app-filter-row></app-filter-row> -->
+                        <select [formControlName]="i" [value]="'kokot'">
+                            @for (item of data.events; track item) {
+                                <option [value]="item.type">{{ item.type }}</option>
+                            }
+                        </select>
+                    </div>
+                }
+            </div>
+        </div>
+    </app-layout>
+    <button (click)="addEvent()">kys</button>
+}
