@@ -1,46 +1,57 @@
 @if (data$ | async; as data) {
-    <app-layout>
+    <app-layout (discardFilters)="removeAllFilters()">
         <div [formGroup]="form">
             <div [formArrayName]="'events'">
-                @for (eventControl of events.controls; track $index; let i = $index) {
+                @for (eventControl of events.controls; track eventControl; let i = $index) {
                     <div class="events-controls" [formGroupName]="i">
-                        <select [formControlName]="'type'">
-                            <option value=""></option>
-                            @for (item of data.events; track $index; let idx = $index) {
-                                <option [value]="idx">{{ item.type }}</option>
-                            }
-                        </select>
-                        <div formArrayName="properties">
-                            @for (propControl of getProps(eventControl).controls; track $index; let j = $index) {
-                                <div class="prop-controls" [formGroupName]="j">
-                                    <select [formControlName]="'property'">
-                                        @for (item of getPropOptions(eventControl, data); track $index; let idx = $index) {
-                                            <option [value]="idx">{{ item.property }}</option>
+                        <div>
+                            <select [formControlName]="'type'">
+                                <option value=""></option>
+                                @for (item of data.events; track $index; let idx = $index) {
+                                    <option [value]="idx">{{ item.type }}</option>
+                                }
+                            </select>
+                            <div formArrayName="properties">
+                                @for (propControl of getProps(eventControl).controls; track propControl; let j = $index) {
+                                    <div class="prop-controls" [formGroupName]="j">
+                                        <select [formControlName]="'property'">
+                                            @for (item of getPropOptions(eventControl, data); track $index; let idx = $index) {
+                                                <option [value]="idx">{{ item.property }}</option>
+                                            }
+                                        </select>
+                                        @if (propControl.get("property")?.value !== "") {
+                                            <app-filter-dropdown
+                                                [activeFilterOption]="propControl.get('optionToDisplay')?.value"
+                                                [activeFilterType]="propControl.get('typeToDisplay')?.value"
+                                                (selectionChange)="setOption(propControl, $event)"
+                                            />
                                         }
-                                    </select>
-                                    @if (propControl.get("property")?.value !== "") {
-                                        <app-filter-dropdown (selectionChange)="setOption(propControl, $event)" />
-                                    }
-                                    <div formArrayName="options">
-                                        @for (
-                                            optionControl of getOptions(propControl).controls;
-                                            track $index;
-                                            let k = $index;
-                                            let last = $last
-                                        ) {
-                                            <div class="option-controls" [formGroupName]="k">
-                                                <input class="inline-input" type="text" formControlName="value" />
-                                                @if (!last) {
-                                                    <span>and</span>
-                                                }
-                                            </div>
-                                        }
+                                        <div formArrayName="options">
+                                            @for (
+                                                optionControl of getOptions(propControl).controls;
+                                                track optionControl;
+                                                let k = $index;
+                                                let last = $last
+                                            ) {
+                                                <div class="option-controls" [formGroupName]="k">
+                                                    <input class="inline-input" type="text" formControlName="value" />
+                                                    @if (!last) {
+                                                        <span>and</span>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                        <button (click)="deleteProp(getProps(eventControl), j)">deleteProp</button>
                                     </div>
-                                </div>
-                            }
-                            @if (eventControl.get("type")?.value !== "") {
-                                <button (click)="addProp(eventControl)">addProp</button>
-                            }
+                                }
+                                @if (eventControl.get("type")?.value !== "") {
+                                    <button (click)="addProp(eventControl)">addProp</button>
+                                }
+                            </div>
+                        </div>
+                        <div class="buttons-event-control">
+                            <button (click)="copyEvent(i)">copyEvent</button>
+                            <button (click)="deleteEvent(i)">deleteEvent</button>
                         </div>
                     </div>
                     <div>----------</div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { FilterWrapperComponent } from '../filter-wrapper/filter-wrapper.component';
 
 @Component({
@@ -7,4 +7,6 @@ import { FilterWrapperComponent } from '../filter-wrapper/filter-wrapper.compone
     templateUrl: './layout.component.html',
     styleUrl: './layout.component.scss',
 })
-export class LayoutComponent {}
+export class LayoutComponent {
+    discardFilters = output<void>();
+}

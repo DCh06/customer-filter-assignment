@@ -1,10 +1,9 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { LayoutComponent } from '../../components/layout/layout.component';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
 import { FilterDropdownComponent } from '../../components/filter-dropdown/filter-dropdown.component';
-import { distinctUntilChanged, filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface Data {
@@ -27,6 +26,7 @@ export class CustomerFilterComponent {
     http = inject(HttpClient);
     fb = inject(FormBuilder);
     destroyRef = inject(DestroyRef);
+    cd = inject(ChangeDetectorRef);
 
     data$ = this.http.get<Data>('https://br-fe-assignment.github.io/customer-events/events.json');
 
@@ -45,14 +45,13 @@ export class CustomerFilterComponent {
     addEvent() {
         const x = this.fb.group({
             type: '',
-            properties: this.fb.array([]),
+            properties: this.fb.nonNullable.array([]),
         });
 
         const control = <FormArray>this.form.get('events');
-        x.valueChanges
+        x.get('type')?.valueChanges
             .pipe(
                 takeUntilDestroyed(this.destroyRef),
-                distinctUntilChanged((a, b) => a.type === b.type),
             )
             .subscribe((val) => (<FormArray>x.get('properties'))?.clear());
 
@@ -62,7 +61,8 @@ export class CustomerFilterComponent {
     addProp(eventControl: AbstractControl) {
         const x = this.fb.group({
             property: '',
-            type: 'string',
+            typeToDisplay: 'string',
+            optionToDisplay: '',
             options: this.fb.nonNullable.array([]),
         });
 
@@ -87,7 +87,11 @@ export class CustomerFilterComponent {
         const x = <FormArray>propControl.get('options');
         x.clear();
 
-        // TODO if more edgecases just change to array in filters
+        propControl.patchValue({
+            typeToDisplay: event.type,
+            optionToDisplay: event.option.value,
+        });
+
         if (event.option.value === 'btw') {
             const gtGroup = this.fb.group({
                 value: '',
@@ -110,6 +114,53 @@ export class CustomerFilterComponent {
 
             x.push(y);
         }
+    }
+
+    deleteEvent(eventControlIndex: number) {
+        console.log(eventControlIndex);
+        this.events.removeAt(eventControlIndex);
+    }
+
+    copyEvent(eventControlIndex: number) {
+        const x = this.events.at(eventControlIndex);
+        const clone = this.fb.group({
+            type: x.get('type')?.value.toString(),
+            properties: this.fb.array(
+                x.get('properties')?.value.map((prop: any) =>
+                    this.fb.group({
+                        property: prop.property.toString(),
+                        typeToDisplay: prop.typeToDisplay.toString(),
+                        optionToDisplay: prop.optionToDisplay.toString(),
+                        options: this.fb.array(
+                            prop.options.map((option: any) =>
+                                this.fb.group({
+                                    option: option.option,
+                                    type: option.type,
+                                    value: option.value,
+                                }),
+                            ),
+                        ),
+                    }),
+                ),
+            ),
+        });
+        
+        clone.get('type')?.valueChanges
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((val) => {
+                (<FormArray>clone.get('properties'))?.clear();
+            });
+        
+        this.events.push(clone, { emitEvent: true });
+    }
+
+    deleteProp(propControls: FormArray, index: number) {
+        propControls.removeAt(index);
+    }
+
+    removeAllFilters() {
+        this.events.clear();
+        this.form.reset();
     }
 
     applyFilters() {

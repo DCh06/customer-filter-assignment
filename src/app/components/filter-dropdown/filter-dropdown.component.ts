@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, output, signal } from '@angular/core';
+import { Component, effect, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 export type FilterType = 'string' | 'number';
@@ -12,10 +12,13 @@ export interface FilterOption {
 @Component({
     selector: 'app-filter-dropdown',
     imports: [CommonModule, FormsModule],
-    templateUrl: './filter-dropdown.component.html' ,
+    templateUrl: './filter-dropdown.component.html',
     styleUrls: ['./filter-dropdown.component.scss'],
 })
 export class FilterDropdownComponent {
+    activeFilterType = input<FilterType>();
+    activeFilterOption = input<string>();
+
     activeType = signal<FilterType>('string');
     selectionChange = output<{
         type: FilterType;
@@ -24,6 +27,14 @@ export class FilterDropdownComponent {
 
     isOpen = signal(false);
     selectedOption = signal<FilterOption | null>(null);
+
+    x = effect(() => {
+        console.log("curakoj")
+        const currentType = this.activeFilterType() || 'string';
+        const currentOption = this.activeFilterOption() || '';
+        const currentSelectedOption = this.optionsMap[currentType].find(option => option.value === currentOption) || null;
+        this.selectedOption.set(currentSelectedOption || null);
+    });
 
     private optionsMap: Record<FilterType, FilterOption[]> = {
         string: [
