@@ -1,6 +1,8 @@
 .layout {
-    background: lightblue;
-    padding: 8px;
+    background: var(--color-bg-primary);
+    padding: 12px;
+    border-radius: 2px;
+
 }
 
 .layout-header {
@@ -8,5 +10,6 @@
     padding-bottom: 8px;
 }
 .discard-button {
-    margin-left: auto
+    margin-left: auto;
+    filter: brightness(0.6);
 }

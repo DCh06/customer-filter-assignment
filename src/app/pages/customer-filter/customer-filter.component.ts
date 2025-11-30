@@ -39,7 +39,7 @@ export class CustomerFilterComponent {
     }
 
     ngOnInit() {
-        this.data$.subscribe((x) => console.log(x));
+        this.addEvent();
     }
 
     addEvent() {
@@ -161,6 +161,7 @@ export class CustomerFilterComponent {
     removeAllFilters() {
         this.events.clear();
         this.form.reset();
+        this.addEvent();
     }
 
     applyFilters() {

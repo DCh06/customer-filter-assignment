@@ -1,10 +1,10 @@
 <div class="layout">
     <div class="layout-header">
         <div class="layout-heading">CUSTOMER FILTER</div>
-        <button class="discard-button" (click)="discardFilters.emit()">Discard filters</button>
+        <button class="btn btn-small discard-button" (click)="discardFilters.emit()">Discard filters</button>
     </div>
     <app-filter-wrapper>
         <ng-content></ng-content>
     </app-filter-wrapper>
-    <button>Apply filters</button>
+    <button class="btn-medium btn-action" (click)="applyFilters.emit()">Apply filters</button>
 </div>

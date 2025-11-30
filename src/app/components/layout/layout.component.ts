@@ -9,4 +9,5 @@ import { FilterWrapperComponent } from '../filter-wrapper/filter-wrapper.compone
 })
 export class LayoutComponent {
     discardFilters = output<void>();
+    applyFilters = output<void>();
 }

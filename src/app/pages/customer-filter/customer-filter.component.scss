@@ -1,10 +1,105 @@
-.prop-controls {
-    padding-left: 24px; 
-}
-.events-controls {
-    display: flex
+.step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    .step-label {
+        color: var(--color-text-muted);
+        font-size: 14px;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    select {
+        min-width: 200px;
+    }
 }
 
-.inline-input, .option-controls {
-    display: inline-block;
+.prop-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    position: relative;
+
+    select {
+        min-width: 150px;
+    }
+
+
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: -28px;
+        left: -7px;
+        bottom: 0;
+        width: 1px;
+        background: var(--color-border);
+        height: 41px;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0.75em;
+        left: -6px;
+        width: 6px; 
+        height: 1px;
+        background: var(--color-border);
+    }
+
+    &:first-child::before {
+        height: 0; 
+    }
+    &:first-child::after { 
+        width: 10px;
+        left: -11px
+    }
+}
+
+.inline-input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.option-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    .and-text {
+        color: var(--color-text-muted);
+        font-size: 13px;
+        font-weight: 500;
+        padding: 0 4px;
+    }
+}
+
+.buttons-event-control {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.center-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 0;
+}
+
+.separator {
+    height: 1px;
+    background: var(--color-bg-hover);
+    position: relative;
+    margin: 24px 0;
+}
+
+.step-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
 }

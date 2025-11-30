@@ -3,14 +3,29 @@
         <div [formGroup]="form">
             <div [formArrayName]="'events'">
                 @for (eventControl of events.controls; track eventControl; let i = $index) {
-                    <div class="events-controls" [formGroupName]="i">
-                        <div>
+                    <div [formGroupName]="i">
+                        <div class="step-header">
+                            <span class="step-label">{{ i + 1 }}. Step:</span>
+                            <span class="step-label">{{
+                                eventControl.get("type")?.value ? data.events[eventControl.get("type")?.value].type : "Unnamed step"
+                            }}</span>
+                            <div class="buttons-event-control">
+                                <button class="btn btn-small btn-icon" (click)="copyEvent(i)">
+                                    <img src="assets/copy-svgrepo-com.svg" alt="Copy" />
+                                </button>
+                                <button class="btn btn-small btn-icon" (click)="deleteEvent(i)">
+                                    <img src="assets/trash-blank-alt-svgrepo-com.svg" alt="Delete Event" />
+                                </button>
+                            </div>
+                        </div>
+                        <div class="step-content">
                             <select [formControlName]="'type'">
                                 <option value=""></option>
                                 @for (item of data.events; track $index; let idx = $index) {
                                     <option [value]="idx">{{ item.type }}</option>
                                 }
                             </select>
+
                             <div formArrayName="properties">
                                 @for (propControl of getProps(eventControl).controls; track propControl; let j = $index) {
                                     <div class="prop-controls" [formGroupName]="j">
@@ -36,30 +51,28 @@
                                                 <div class="option-controls" [formGroupName]="k">
                                                     <input class="inline-input" type="text" formControlName="value" />
                                                     @if (!last) {
-                                                        <span>and</span>
+                                                        <span class="and-text">and</span>
                                                     }
                                                 </div>
                                             }
                                         </div>
-                                        <button (click)="deleteProp(getProps(eventControl), j)">deleteProp</button>
+                                        <button class="btn btn-small btn-icon" (click)="deleteProp(getProps(eventControl), j)">
+                                            <img src="assets/cross-small-svgrepo-com.svg" alt="Delete" />
+                                        </button>
                                     </div>
                                 }
                                 @if (eventControl.get("type")?.value !== "") {
-                                    <button (click)="addProp(eventControl)">addProp</button>
+                                    <button class="btn btn-small" (click)="addProp(eventControl)">+ Add Property</button>
                                 }
                             </div>
                         </div>
-                        <div class="buttons-event-control">
-                            <button (click)="copyEvent(i)">copyEvent</button>
-                            <button (click)="deleteEvent(i)">deleteEvent</button>
-                        </div>
                     </div>
-                    <div>----------</div>
+                    <div class="separator"></div>
                 }
             </div>
         </div>
         @if (data.events.length > 0) {
-            <button (click)="addEvent()">addEvent</button>
+            <div class="center-button"><button class="btn btn-medium" (click)="addEvent()">+ ADD FUNNEL STEP</button></div>
         }
     </app-layout>
     <button (click)="applyFilters()">ApplyFiltersNotfinished</button>
