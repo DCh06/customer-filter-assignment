@@ -1,0 +1,29 @@
+ <div class="dropdown-container">
+            <!-- Input Trigger -->
+            <div class="input-trigger" (click)="toggleDropdown()">
+                <span>{{ selectedOption()?.label || 'Select operator' }}</span>
+                <span class="arrow">▼</span>
+            </div>
+
+            <div class="dropdown-menu" *ngIf="isOpen()">
+                <div class="type-tabs">
+                    <div class="tab" [class.active]="activeType() === 'string'" (click)="setType('string')">
+                        <span class="tab-icon">T</span>
+                        <span class="tab-label">string</span>
+                    </div>
+                    <div class="tab" [class.active]="activeType() === 'number'" (click)="setType('number')">
+                        <span class="tab-icon">#</span>
+                        <span class="tab-label">number</span>
+                    </div>
+                </div>
+
+                <ul class="options-list">
+                    <li
+                        *ngFor="let option of currentOptions"
+                        (click)="selectOption(option)"
+                    >
+                        {{ option.label }}
+                    </li>
+                </ul>
+            </div>
+        </div>

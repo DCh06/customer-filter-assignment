@@ -1,0 +1,109 @@
+$primary-color: #ffc107; // Similar yellow to your screenshot
+$text-color: #333;
+$border-color: #e0e0e0;
+$hover-bg: #f5f5f5;
+
+.dropdown-container {
+    display:inline-block;
+    position: relative;
+    width: 250px;
+    font-family: sans-serif;
+}
+
+.input-trigger {
+    border: 1px solid $border-color;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    user-select: none;
+
+    .arrow {
+        font-size: 0.8em;
+        color: #999;
+    }
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid $border-color;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 4px;
+    z-index: 10;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.type-tabs {
+    display: flex;
+    border-bottom: 1px solid $border-color;
+
+    .tab {
+        flex: 1;
+        text-align: center;
+        padding: 12px 0;
+        cursor: pointer;
+        color: #888;
+        position: relative;
+
+        &:hover {
+            background-color: #fafafa;
+        }
+
+        &.active {
+            color: $text-color;
+            font-weight: 600;
+
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 25%;
+                width: 50%;
+                height: 3px;
+                background-color: $primary-color;
+            }
+        }
+
+        .tab-icon {
+            display: block;
+            font-size: 1.2em;
+            margin-bottom: 4px;
+        }
+
+        .tab-label {
+            font-size: 0.7em;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+    }
+}
+
+.options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+
+    li {
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 0.9em;
+        color: $text-color;
+
+        &:hover {
+            background-color: $primary-color;
+        }
+
+        &.selected {
+            font-weight: bold;
+        }
+    }
+}
