@@ -1,5 +1,3 @@
-<!-- TODO -->
-<!-- clear on change -->
 @if (data$ | async; as data) {
     <app-layout>
         <div [formGroup]="form">
@@ -15,16 +13,14 @@
                         <div formArrayName="properties">
                             @for (propControl of getProps(eventControl).controls; track $index; let j = $index) {
                                 <div class="prop-controls" [formGroupName]="j">
-                                    <select [formControlName]="'property'" [value]="''">
+                                    <select [formControlName]="'property'">
                                         @for (item of getPropOptions(eventControl, data); track $index; let idx = $index) {
                                             <option [value]="idx">{{ item.property }}</option>
                                         }
                                     </select>
-                                    <!-- <select [formControlName]="'type'">
-                                        <option value="string">string</option>
-                                        <option value="number">number</option>
-                                    </select> -->
-                                    <app-filter-dropdown (selectionChange)="setOption(propControl, $event)" />
+                                    @if (propControl.get("property")?.value !== "") {
+                                        <app-filter-dropdown (selectionChange)="setOption(propControl, $event)" />
+                                    }
                                     <div formArrayName="options">
                                         @for (
                                             optionControl of getOptions(propControl).controls;
@@ -33,7 +29,7 @@
                                             let last = $last
                                         ) {
                                             <div class="option-controls" [formGroupName]="k">
-                                                <input class="inline-input" type="text" formControlName="optionValue" />
+                                                <input class="inline-input" type="text" formControlName="value" />
                                                 @if (!last) {
                                                     <span>and</span>
                                                 }
@@ -42,14 +38,18 @@
                                     </div>
                                 </div>
                             }
-                            <button (click)="addProp(eventControl)">addProp</button>
+                            @if (eventControl.get("type")?.value !== "") {
+                                <button (click)="addProp(eventControl)">addProp</button>
+                            }
                         </div>
                     </div>
                     <div>----------</div>
                 }
             </div>
         </div>
-        <button (click)="addEvent()">addEvent</button>
+        @if (data.events.length > 0) {
+            <button (click)="addEvent()">addEvent</button>
+        }
     </app-layout>
     <button (click)="applyFilters()">ApplyFiltersNotfinished</button>
 }

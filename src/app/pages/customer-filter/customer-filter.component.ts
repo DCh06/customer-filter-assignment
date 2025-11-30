@@ -1,23 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { LayoutComponent } from '../../components/layout/layout.component';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
 import { FilterDropdownComponent } from '../../components/filter-dropdown/filter-dropdown.component';
+import { distinctUntilChanged, filter } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-// interface CustomerPropFilters {
-//     name: string;
-//     type: 'string' | 'number';
-// }
-
-// interface CustomerEventFilters {
-//     name: string;
-//     props: FormArray<FormControl<CustomerPropFilters | null>>;
-// }
-
-// interface CustomerFilters {
-//     events: FormArray<FormGroup<any>>;
-// }
 interface Data {
     events: {
         type: string;
@@ -37,6 +26,7 @@ interface Data {
 export class CustomerFilterComponent {
     http = inject(HttpClient);
     fb = inject(FormBuilder);
+    destroyRef = inject(DestroyRef);
 
     data$ = this.http.get<Data>('https://br-fe-assignment.github.io/customer-events/events.json');
 
@@ -59,6 +49,13 @@ export class CustomerFilterComponent {
         });
 
         const control = <FormArray>this.form.get('events');
+        x.valueChanges
+            .pipe(
+                takeUntilDestroyed(this.destroyRef),
+                distinctUntilChanged((a, b) => a.type === b.type),
+            )
+            .subscribe((val) => (<FormArray>x.get('properties'))?.clear());
+
         control.push(x);
     }
 
@@ -113,10 +110,6 @@ export class CustomerFilterComponent {
 
             x.push(y);
         }
-    }
-
-    tttt1123(eventControl: any) {
-        console.log(eventControl.get('props'));
     }
 
     applyFilters() {
