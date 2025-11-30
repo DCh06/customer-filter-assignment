@@ -29,7 +29,6 @@ export class FilterDropdownComponent {
     selectedOption = signal<FilterOption | null>(null);
 
     x = effect(() => {
-        console.log("curakoj")
         const currentType = this.activeFilterType() || 'string';
         const currentOption = this.activeFilterOption() || '';
         const currentSelectedOption = this.optionsMap[currentType].find(option => option.value === currentOption) || null;

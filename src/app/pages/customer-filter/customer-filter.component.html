@@ -3,7 +3,7 @@
         <div [formGroup]="form">
             <div [formArrayName]="'events'">
                 @for (eventControl of events.controls; track eventControl; let i = $index) {
-                    <div [formGroupName]="i">
+                    <div class="event-control" [formGroupName]="i">
                         <div class="step-header">
                             <span class="step-label">{{ i + 1 }}. Step:</span>
                             <span class="step-label">{{
@@ -29,6 +29,9 @@
                             <div formArrayName="properties">
                                 @for (propControl of getProps(eventControl).controls; track propControl; let j = $index) {
                                     <div class="prop-controls" [formGroupName]="j">
+                                        @if (j > 0) {
+                                            <span class="and-text">AND</span>
+                                        }
                                         <select [formControlName]="'property'">
                                             @for (item of getPropOptions(eventControl, data); track $index; let idx = $index) {
                                                 <option [value]="idx">{{ item.property }}</option>
@@ -75,5 +78,4 @@
             <div class="center-button"><button class="btn btn-medium" (click)="addEvent()">+ ADD FUNNEL STEP</button></div>
         }
     </app-layout>
-    <button (click)="applyFilters()">ApplyFiltersNotfinished</button>
 }

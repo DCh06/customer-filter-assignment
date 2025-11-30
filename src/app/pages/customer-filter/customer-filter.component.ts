@@ -117,7 +117,9 @@ export class CustomerFilterComponent {
     }
 
     deleteEvent(eventControlIndex: number) {
-        console.log(eventControlIndex);
+        if (this.events.length === 1) {
+            return;
+        }
         this.events.removeAt(eventControlIndex);
     }
 

@@ -28,8 +28,6 @@
         min-width: 150px;
     }
 
-
-
     &::before {
         content: "";
         position: absolute;
@@ -46,18 +44,29 @@
         position: absolute;
         top: 0.75em;
         left: -6px;
-        width: 6px; 
+        width: 6px;
         height: 1px;
         background: var(--color-border);
     }
 
     &:first-child::before {
-        height: 0; 
+        height: 0;
     }
-    &:first-child::after { 
+    &:first-child::after {
         width: 10px;
-        left: -11px
+        left: -11px;
     }
+}
+
+.and-text {
+    color: var(--color-text-muted);
+    position: absolute;
+    top: 5px;
+    left: -43px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0 4px;
+    z-index: 1;
 }
 
 .inline-input {
@@ -102,4 +111,15 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
+}
+
+.event-control {
+    .buttons-event-control{
+        visibility: hidden;
+    }
+    &:hover {
+        .buttons-event-control {
+            visibility: visible;
+        }
+    }
 }
