@@ -7,20 +7,12 @@
                     @let typeData = typeId ? data.events[+typeId] : null;
 
                     <div class="event-control" [formGroupName]="i">
-                        <div class="step-header">
-                            <span class="step-label">{{ i + 1 }}. Step:</span>
-                            <span class="step-label">{{
-                                typeData?.type || "Unnamed step"
-                            }}</span>
-                            <div class="buttons-event-control">
-                                <button class="btn btn-small btn-icon" (click)="copyEvent(i)">
-                                    <img src="assets/copy-svgrepo-com.svg" alt="Copy" />
-                                </button>
-                                <button class="btn btn-small btn-icon" (click)="deleteEvent(i)">
-                                    <img src="assets/trash-blank-alt-svgrepo-com.svg" alt="Delete Event" />
-                                </button>
-                            </div>
-                        </div>
+                        <app-step-header 
+                            [stepNumber]="i + 1" 
+                            [stepName]="typeData?.type || 'Unnamed step'"
+                            (copy)="copyEvent(i)"
+                            (delete)="deleteEvent(i)">
+                        </app-step-header>
                         <div class="step-content">
                             <select [formControlName]="'type'">
                                 <option value=""></option>
@@ -60,7 +52,7 @@
                                                 <div class="option-controls" [formGroupName]="k">
                                                     <input class="inline-input" type="text" formControlName="value" />
                                                     @if (!last) {
-                                                        <span class="and-text">and</span>
+                                                        <span class="and-text-between">and</span>
                                                     }
                                                 </div>
                                             }

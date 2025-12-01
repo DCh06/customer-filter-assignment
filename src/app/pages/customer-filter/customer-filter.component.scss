@@ -1,21 +1,3 @@
-.step-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-
-    .step-label {
-        color: var(--color-text-muted);
-        font-size: 14px;
-        font-weight: 500;
-        white-space: nowrap;
-    }
-
-    select {
-        min-width: 200px;
-    }
-}
-
 .prop-controls {
     display: flex;
     align-items: center;
@@ -79,18 +61,13 @@
     align-items: center;
     gap: 8px;
 
-    .and-text {
+    .and-text-between {
         color: var(--color-text-muted);
         font-size: 13px;
         font-weight: 500;
         padding: 0 4px;
+        padding-right: 10px;
     }
-}
-
-.buttons-event-control {
-    display: flex;
-    gap: 8px;
-    margin-left: auto;
 }
 
 .center-button {
@@ -114,11 +91,11 @@
 }
 
 .event-control {
-    .buttons-event-control{
+    app-step-header ::ng-deep .buttons-event-control {
         visibility: hidden;
     }
     &:hover {
-        .buttons-event-control {
+        app-step-header ::ng-deep .buttons-event-control {
             visibility: visible;
         }
     }

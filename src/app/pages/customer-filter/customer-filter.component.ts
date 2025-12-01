@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
 import { FilterDropdownComponent } from '../../components/filter-dropdown/filter-dropdown.component';
+import { StepHeaderComponent } from '../../components/step-header/step-header.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface Data {
@@ -40,7 +41,7 @@ type CustomerFilterForm = FormGroup<{
 
 @Component({
     selector: 'app-customer-filter',
-    imports: [LayoutComponent, ReactiveFormsModule, AsyncPipe, FilterDropdownComponent],
+    imports: [LayoutComponent, ReactiveFormsModule, AsyncPipe, FilterDropdownComponent, StepHeaderComponent],
     templateUrl: './customer-filter.component.html',
     styleUrl: './customer-filter.component.scss',
 })
