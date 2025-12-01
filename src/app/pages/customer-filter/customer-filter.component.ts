@@ -93,7 +93,6 @@ export class CustomerFilterComponent {
     }
 
     setOption(propControl: AbstractControl, event: any) {
-        console.log(propControl, event);
         const x = <FormArray>propControl.get('options');
         x.clear();
 
