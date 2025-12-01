@@ -1,13 +1,16 @@
 @if (data$ | async; as data) {
-    <app-layout (discardFilters)="removeAllFilters()">
+    <app-layout (discardFilters)="removeAllFilters()" (applyFilters)="applyFilters(data)">
         <div [formGroup]="form">
             <div [formArrayName]="'events'">
                 @for (eventControl of events.controls; track eventControl; let i = $index) {
+                    @let typeId = eventControl.get("type")?.value?.toString();
+                    @let typeData = typeId ? data.events[+typeId] : null;
+
                     <div class="event-control" [formGroupName]="i">
                         <div class="step-header">
                             <span class="step-label">{{ i + 1 }}. Step:</span>
                             <span class="step-label">{{
-                                eventControl.get("type")?.value ? data.events[eventControl.get("type")?.value].type : "Unnamed step"
+                                typeData?.type || "Unnamed step"
                             }}</span>
                             <div class="buttons-event-control">
                                 <button class="btn btn-small btn-icon" (click)="copyEvent(i)">
@@ -27,13 +30,15 @@
                             </select>
 
                             <div formArrayName="properties">
-                                @for (propControl of getProps(eventControl).controls; track propControl; let j = $index) {
+                                @let properties = $any(eventControl.get('properties')).controls;
+                                @for (propControl of properties; track propControl; let j = $index) {
                                     <div class="prop-controls" [formGroupName]="j">
                                         @if (j > 0) {
                                             <span class="and-text">AND</span>
                                         }
                                         <select [formControlName]="'property'">
-                                            @for (item of getPropOptions(eventControl, data); track $index; let idx = $index) {
+                                            @let propOptions = typeId ? data.events[+typeId].properties || [] : [];
+                                            @for (item of propOptions; track $index; let idx = $index) {
                                                 <option [value]="idx">{{ item.property }}</option>
                                             }
                                         </select>
@@ -45,8 +50,9 @@
                                             />
                                         }
                                         <div formArrayName="options">
+                                            @let options = $any(propControl.get('options')).controls;
                                             @for (
-                                                optionControl of getOptions(propControl).controls;
+                                                optionControl of options;
                                                 track optionControl;
                                                 let k = $index;
                                                 let last = $last
@@ -59,12 +65,12 @@
                                                 </div>
                                             }
                                         </div>
-                                        <button class="btn btn-small btn-icon" (click)="deleteProp(getProps(eventControl), j)">
+                                        <button class="btn btn-small btn-icon" (click)="deleteProp(properties, j)">
                                             <img src="assets/cross-small-svgrepo-com.svg" alt="Delete" />
                                         </button>
                                     </div>
                                 }
-                                @if (eventControl.get("type")?.value !== "") {
+                                @if (typeId !== "") {
                                     <button class="btn btn-small" (click)="addProp(eventControl)">+ Add Property</button>
                                 }
                             </div>
