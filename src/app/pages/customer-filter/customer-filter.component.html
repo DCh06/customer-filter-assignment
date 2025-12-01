@@ -5,13 +5,13 @@
                 @for (eventControl of events.controls; track eventControl; let i = $index) {
                     @let typeId = eventControl.get("type")?.value?.toString();
                     @let typeData = typeId ? data.events[+typeId] : null;
-
                     <div class="event-control" [formGroupName]="i">
-                        <app-step-header 
-                            [stepNumber]="i + 1" 
+                        <app-step-header
+                            [stepNumber]="i + 1"
                             [stepName]="typeData?.type || 'Unnamed step'"
                             (copy)="copyEvent(i)"
-                            (delete)="deleteEvent(i)">
+                            (delete)="deleteEvent(i)"
+                        >
                         </app-step-header>
                         <div class="step-content">
                             <select [formControlName]="'type'">
@@ -20,10 +20,9 @@
                                     <option [value]="idx">{{ item.type }}</option>
                                 }
                             </select>
-
                             <div formArrayName="properties">
-                                @let properties = $any(eventControl.get('properties')).controls;
-                                @for (propControl of properties; track propControl; let j = $index) {
+                                @let properties = $any(eventControl.get("properties"));
+                                @for (propControl of properties.controls; track propControl; let j = $index) {
                                     <div class="prop-controls" [formGroupName]="j">
                                         @if (j > 0) {
                                             <span class="and-text">AND</span>
@@ -42,13 +41,8 @@
                                             />
                                         }
                                         <div formArrayName="options">
-                                            @let options = $any(propControl.get('options')).controls;
-                                            @for (
-                                                optionControl of options;
-                                                track optionControl;
-                                                let k = $index;
-                                                let last = $last
-                                            ) {
+                                            @let options = $any(propControl.get("options"));
+                                            @for (optionControl of options.controls; track optionControl; let k = $index; let last = $last) {
                                                 <div class="option-controls" [formGroupName]="k">
                                                     <input class="inline-input" type="text" formControlName="value" />
                                                     @if (!last) {

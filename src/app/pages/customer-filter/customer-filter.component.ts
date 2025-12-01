@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject } from '@angular/core';
 import { LayoutComponent } from '../../components/layout/layout.component';
 import { HttpClient } from '@angular/common/http';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -44,6 +44,7 @@ type CustomerFilterForm = FormGroup<{
     imports: [LayoutComponent, ReactiveFormsModule, AsyncPipe, FilterDropdownComponent, StepHeaderComponent],
     templateUrl: './customer-filter.component.html',
     styleUrl: './customer-filter.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomerFilterComponent {
     http = inject(HttpClient);
@@ -52,7 +53,6 @@ export class CustomerFilterComponent {
     cd = inject(ChangeDetectorRef);
 
     data$ = this.http.get<Data>('https://br-fe-assignment.github.io/customer-events/events.json');
-
     form: CustomerFilterForm = this.fb.group({
         events: this.fb.nonNullable.array<EventFormGroup>([]),
     });
@@ -133,6 +133,7 @@ export class CustomerFilterComponent {
         this.events.removeAt(eventControlIndex);
     }
 
+    // todo split so it can be reused for creation
     copyEvent(eventControlIndex: number) {
         const x = this.events.at(eventControlIndex);
         const clone: EventFormGroup = this.fb.nonNullable.group({
@@ -177,7 +178,6 @@ export class CustomerFilterComponent {
     }
 
     applyFilters(data: Data) {
-        
         console.log(this.form.value);
     }
 }
